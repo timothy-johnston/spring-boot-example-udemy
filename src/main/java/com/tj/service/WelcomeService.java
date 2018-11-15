@@ -1,4 +1,4 @@
-package com.tj;
+package com.tj.service;
 
 import org.springframework.stereotype.Component;
 
