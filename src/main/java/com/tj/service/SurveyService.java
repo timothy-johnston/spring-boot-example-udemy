@@ -80,4 +80,21 @@ public class SurveyService {
 		
 		return question;
 	}
+	
+	public Question retrieveQuestion(String surveyId, String questionId) {
+		Survey survey = retrieveSurvey(surveyId);
+		
+		if (survey == null) {
+			return null;
+		}
+		
+		for (Question question : survey.getQuestions()) {
+			if (question.getId().equals(questionId)) {
+				return question;
+			}
+		}
+		
+		return null;
+		
+	}
 }
