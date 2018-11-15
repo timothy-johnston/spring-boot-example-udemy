@@ -12,7 +12,7 @@ import com.tj.model.Question;
 import com.tj.model.Survey;
 
 //This service is what will talk to the backend
-//(Is that why its the only one with @component??)
+//(Is that why its the only one with @component???)
 @Component
 public class SurveyService {
 
