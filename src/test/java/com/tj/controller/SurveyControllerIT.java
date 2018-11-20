@@ -39,64 +39,54 @@ public class SurveyControllerIT {
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 	}
 
-	//TODO: Refactor
 	@Test
 	public void retrieveSurveyQuestion() throws Exception {
 		
-		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia,options:[India,Russia,United States,China]}";
+		HttpEntity<String> entity = new HttpEntity<String>(null, headers);
 		
-		ResponseEntity<String> response = template.exchange(createUrl("/surveys/Survey1/questions/Question1"), HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
-                headers), String.class);
+		ResponseEntity<String> response = template.exchange(createURLWithPort("/surveys/Survey1/questions/Question1"), HttpMethod.GET, entity, String.class);
+		
+		String expected = "{id:Question1,description:Largest Country in the World,correctAnswer:Russia}";
 		
 		JSONAssert.assertEquals(expected,  response.getBody(), false);
 		
 	}
 	
-	//TODO: Refactor
 	@Test
 	public void retrieveAllSurveyQuestions() throws Exception {
 		
-		String url = createUrl("/surveys/Survey1/questions");
-		
-		TestRestTemplate restTemplate = new TestRestTemplate();
-		
-		HttpHeaders headers = new HttpHeaders();
-		
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		
-		ResponseEntity<List<Question>> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESN'T MATTER", headers), 
-				new ParameterizedTypeReference<List<Question>>() {} );
-		
-		Question sampleQuestion = new Question("Question1", "Largest Country in the World", "Russia", Arrays.asList("India","Russia","United States", "China"));
-		
+		ResponseEntity<List<Question>> response = template.exchange(
+				createURLWithPort("/surveys/Survey1/questions"),
+				HttpMethod.GET, new HttpEntity<String>("DUMMY_DOESNT_MATTER",
+						headers),
+				new ParameterizedTypeReference<List<Question>>() {
+				});
+
+		Question sampleQuestion = new Question("Question1",
+				"Largest Country in the World", "Russia", Arrays.asList(
+						"India", "Russia", "United States", "China"));
+
 		assertTrue(response.getBody().contains(sampleQuestion));
 		
 	}
 	
-	//TODO: Refactor
 	@Test
 	public void testAddQuestion() {
-		String url = createUrl("/surveys/Survey1/questions");
-		
-		
-		TestRestTemplate restTemplate = new TestRestTemplate();
-		
-		HttpHeaders headers = new HttpHeaders();
-		
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		
-		Question question = new Question("DOESNTMATTER", "Question1", "russia", Arrays.asList("India","Russia", "United States", "China"));
-		
+		Question question = new Question("DOESNTMATTER", "Question1", "Russia",
+				Arrays.asList("India", "Russia", "United States", "China"));
+
 		HttpEntity entity = new HttpEntity<Question>(question, headers);
-		
-		ResponseEntity<String> response = restTemplate.exchange(url,  HttpMethod.POST, entity, String.class);
-		
+
+		ResponseEntity<String> response = template.exchange(
+				createURLWithPort("/surveys/Survey1/questions"),
+				HttpMethod.POST, entity, String.class);
+
 		String actual = response.getHeaders().get(HttpHeaders.LOCATION).get(0);
-		
+
 		assertTrue(actual.contains("/surveys/Survey1/questions/"));
 	}
 	
-	private String createUrl(String uri) {
+	private String createURLWithPort(String uri) {
         return "http://localhost:" + port + uri;
     }
 
