@@ -8,7 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
-@ComponentScan("com.tj")
 public class Application {
 
 	public static void main(String[] args) {
