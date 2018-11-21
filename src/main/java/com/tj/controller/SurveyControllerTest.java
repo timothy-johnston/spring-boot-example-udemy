@@ -25,7 +25,7 @@ import com.tj.model.Question;
 import com.tj.service.SurveyService;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = SurveyController.class)
+@WebMvcTest(value = SurveyController.class, secure = false)
 public class SurveyControllerTest {
 
 	@Autowired
